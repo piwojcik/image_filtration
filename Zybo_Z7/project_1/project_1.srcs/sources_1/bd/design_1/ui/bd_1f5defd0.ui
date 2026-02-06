@@ -1,0 +1,39 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.72301",
+   "Default View_TopLeft":"137,-376",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port hdmi_in_ddc -pg 1 -lvl 6 -x 1170 -y -60 -defaultsOSRD
+preplace port TMDS_0 -pg 1 -lvl 0 -x -410 -y 70 -defaultsOSRD
+preplace port TMDS_1 -pg 1 -lvl 6 -x 1170 -y -270 -defaultsOSRD
+preplace port dvi2RGB -pg 1 -lvl 6 -x 1170 -y -140 -defaultsOSRD
+preplace port RGB2dvi -pg 1 -lvl 0 -x -410 -y -260 -defaultsOSRD
+preplace port port-id_sys_clock -pg 1 -lvl 0 -x -410 -y -150 -defaultsOSRD
+preplace port port-id_reset_rtl -pg 1 -lvl 0 -x -410 -y -170 -defaultsOSRD
+preplace port port-id_pLocked_0 -pg 1 -lvl 6 -x 1170 -y -10 -defaultsOSRD
+preplace port port-id_PixelClk -pg 1 -lvl 6 -x 1170 -y 90 -defaultsOSRD
+preplace inst dvi2rgb_0 -pg 1 -lvl 4 -x 560 -y 100 -defaultsOSRD
+preplace inst rgb2dvi_0 -pg 1 -lvl 5 -x 990 -y -240 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 2 -x 10 -y -150 -defaultsOSRD
+preplace inst xlconstant_1 -pg 1 -lvl 3 -x 200 -y 220 -defaultsOSRD
+preplace netloc clk_wiz_0_clk200_o 1 2 2 N -160 280
+preplace netloc dvi2rgb_0_PixelClk 1 4 2 680 150 1130
+preplace netloc reset_rtl_1 1 0 5 N -170 -150 -220 N -220 290 -240 N
+preplace netloc sys_clock_1 1 0 2 NJ -150 -150
+preplace netloc dvi2rgb_0_pLocked 1 4 2 NJ 140 1120
+preplace netloc xlconstant_1_dout 1 3 1 280 130n
+preplace netloc RGB_1_1 1 0 5 NJ -260 N -260 NJ -260 N -260 NJ
+preplace netloc TMDS_0_1 1 0 4 NJ 70 N 70 N 70 N
+preplace netloc dvi2rgb_0_DDC 1 4 2 N 80 1110
+preplace netloc dvi2rgb_0_RGB 1 4 2 NJ 60 1100J
+preplace netloc rgb2dvi_0_TMDS 1 5 1 1100 -270n
+levelinfo -pg 1 -410 -170 10 200 560 990 1170
+pagesize -pg 1 -db -bbox -sgen -530 -500 1310 480
+"
+}
+{
+   "da_board_cnt":"3",
+   "da_clkrst_cnt":"2"
+}
