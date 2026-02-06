@@ -1,9 +1,7 @@
-*
-
-!Zybo_Z7/
-!Zybo_Z7/project_1/
-!Zybo_Z7/project_1/project_1.src/
-!Zybo_Z7/constraints/
-
-!Zybo_Z7/project_1/project_1.src/** 
-!Zybo_Z7/constraints/**
+*.jou
+*.log
+*.runs/
+*.sim/
+*.gen/
+*.ip_user_files/
+*.bin
