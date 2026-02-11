@@ -1,15 +1,14 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Author: Piotr Wojcik
 // 
 // Create Date: 02/02/2026 06:38:19 PM
 // Design Name: 
 // Module Name: top
-// Project Name: 
+// Project Name: Image filtration
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Top module for filtration system
 // 
 // Dependencies: 
 // Revision:
@@ -46,17 +45,9 @@ logic video_active_reg, hsync_reg, vsync_reg, PixelClk_o;
 logic video_active_in, hsync_in, vsync_in;
 
 assign hdmi_rx_hpd = 1'b1;
+assign video_active_reg = led[0];
+assign led[2] = sys_rst;
 
-// always_ff @(posedge PixelClk_o) begin
-//     hsync_reg <= hsync_in;
-//     vsync_reg <= vsync_in;
-//     video_active_reg <= video_active_in;
-//     if(sw[1])begin
-//         data_reg  <= 24'hFFFFFF;
-//     end else begin
-//         data_reg <= rgb_data;
-//     end
-// end
     
 design_1_wrapper u_design_1_wrapper(
     .TMDS_0_clk_n(hdmi_rx_clk_n),
@@ -81,14 +72,11 @@ design_1_wrapper u_design_1_wrapper(
     .dvi2RGB_vsync(vsync_in),
     // RGB to HDMI OUT
     .RGB2dvi_active_video(video_active_reg),
-    .RGB2dvi_data({gray_data,gray_data,gray_data}),
+    .RGB2dvi_data({row1[15:8],row1[15:8],row1[15:8]}),
     .RGB2dvi_hsync(hsync_reg),
     .RGB2dvi_vsync(vsync_reg)
     );
     
-assign video_active_reg = led[0];
-assign led[2] = sys_rst;
-
     rgb2gray u_rgb2gray( 
     .clk(PixelClk_o),
     .rst(sys_rst),
@@ -98,10 +86,30 @@ assign led[2] = sys_rst;
     
     .rgb_in(rgb_data),
     
-    .hsync_o(hsync_reg),
-    .vsync_o(vsync_reg),
-    .vde_o(video_active_reg),
+    .hsync_o(hsync_gray_o),
+    .vsync_o(vsync_gray_o),
+    .vde_o(vde_gray_o),
     
     .gray_o(gray_data)
+);
+
+logic [23:0] row0, row1, row2;
+logic hsync_gray_o, vsync_gray_o, vde_gray_o;
+
+line_buffers_ctrl u_line_buffers_ctrl(
+    .clk(PixelClk_o),
+    .rst(sys_rst),
+    .vde_i(vde_gray_o),
+    .hsync_i(hsync_gray_o),
+    .vsync_i(vsync_gray_o),
+    .gray_i(gray_data),
+    
+    .row0(row0),
+    .row1(row1),
+    .row2(row2),
+    
+    .vde_o(video_active_reg), 
+    .hsync_o(hsync_reg),
+    .vsync_o(vsync_reg)
 );
 endmodule

@@ -1,7 +1,6 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Author: Piotr Wojcik 
 // 
 // Create Date: 02/06/2026 11:05:43 PM
 // Design Name: 
@@ -51,7 +50,8 @@ module rgb2gray(
       end
     end
 
-logic [7:0] r, g, b, r1, r2, g1, g2, b1, b2, calc_gray;    
+logic [7:0] r, g, b, r1, r2, g1, g2, b1, b2, calc_gray; 
+   
 //    coefficients r * 0,281 + g * 0,562 + b * 0,093
     always_comb begin
       r = rgb_in[23:16];
