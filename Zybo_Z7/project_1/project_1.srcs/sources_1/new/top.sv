@@ -35,8 +35,8 @@ module top(
     output logic [2:0] hdmi_tx_data_n,
     output logic [2:0] hdmi_tx_data_p,
 
-    output logic led[3:0],
-    input logic sw[2:0]
+    output logic [3:0] led,
+    input  logic [3:0] sw
 );        
 
 logic [23:0] rgb_data, data_reg;
@@ -49,7 +49,7 @@ assign video_active_reg = led[0];
 assign led[2] = sys_rst;
 
     
-design_1_wrapper u_design_1_wrapper(
+design_1_wrapper HDMI2HDMI(
     .TMDS_0_clk_n(hdmi_rx_clk_n),
     .TMDS_0_clk_p(hdmi_rx_clk_p),
     .TMDS_0_data_n(hdmi_rx_data_n),
@@ -72,7 +72,7 @@ design_1_wrapper u_design_1_wrapper(
     .dvi2RGB_vsync(vsync_in),
     // RGB to HDMI OUT
     .RGB2dvi_active_video(video_active_reg),
-    .RGB2dvi_data({row1[15:8],row1[15:8],row1[15:8]}),
+    .RGB2dvi_data({filtered_pixel,filtered_pixel,filtered_pixel}),
     .RGB2dvi_hsync(hsync_reg),
     .RGB2dvi_vsync(vsync_reg)
     );
@@ -93,21 +93,60 @@ design_1_wrapper u_design_1_wrapper(
     .gray_o(gray_data)
 );
 
-logic [23:0] row0, row1, row2;
 logic hsync_gray_o, vsync_gray_o, vde_gray_o;
+logic [7:0] pattern_data;
+logic hsync_pattern_o, vsync_pattern_o, vde_pattern_o;
+
+pattern_gen u_pattern_gen(
+    .clk(PixelClk_o),
+    .rst(sys_rst),
+    .hsync_i(hsync_gray_o),
+    .vsync_i(vsync_gray_o),
+    .vde_i(vde_gray_o),
+    .pattern_gen_en(sw[3]),
+    .pixel_i(gray_data),
+
+    .hsync_o(hsync_pattern_o),
+    .vsync_o(vsync_pattern_o),
+    .vde_o(vde_pattern_o),
+
+    .pixel_o(pattern_data)
+);
+
+logic [23:0] row0, row1, row2;
 
 line_buffers_ctrl u_line_buffers_ctrl(
     .clk(PixelClk_o),
     .rst(sys_rst),
-    .vde_i(vde_gray_o),
-    .hsync_i(hsync_gray_o),
-    .vsync_i(vsync_gray_o),
-    .gray_i(gray_data),
+    .vde_i(vde_pattern_o),
+    .hsync_i(hsync_pattern_o),
+    .vsync_i(vsync_pattern_o),
+    .gray_i(pattern_data),
     
     .row0(row0),
     .row1(row1),
     .row2(row2),
     
+    .vde_o(video_active_linebuf), 
+    .hsync_o(hsync_linebuf),
+    .vsync_o(vsync_linebuf)
+);
+ logic video_active_linebuf, hsync_linebuf, vsync_linebuf;
+ logic [7:0] filtered_pixel;
+
+filtration_ctrl u_filtration_ctrl(
+    .clk(PixelClk_o),
+    .rst(sys_rst),
+    .vde_i(video_active_linebuf),
+    .hsync_i(hsync_linebuf),
+    .vsync_i(vsync_linebuf),
+    .filter_mode_i(sw),
+
+    .row0(row0),
+    .row1(row1),
+    .row2(row2),
+
+    .pixel_o(filtered_pixel), 
     .vde_o(video_active_reg), 
     .hsync_o(hsync_reg),
     .vsync_o(vsync_reg)

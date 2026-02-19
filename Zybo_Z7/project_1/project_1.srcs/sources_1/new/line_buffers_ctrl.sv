@@ -40,9 +40,9 @@ module line_buffers_ctrl #(
     logic [7:0] p21, p22, p23;
     logic [7:0] p31, p32, p33;
     
-    assign row0 = {p11, p12, p13};
-    assign row1 = {p21, p22, p23};
-    assign row2 = {p31, p32, p33};
+     assign row0 = {p11, p12, p13};
+     assign row1 = {p21, p22, p23};
+     assign row2 = {p31, p32, p33};
 
     line_buffer #(.LINE_WIDTH(LINE_WIDTH)) line_buffer_1 (
         .clk(clk),
