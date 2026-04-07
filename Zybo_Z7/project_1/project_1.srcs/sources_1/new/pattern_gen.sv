@@ -67,17 +67,54 @@ module pattern_gen (
         end
     end
 
-    always_comb begin
-        if(pattern_gen_en) begin
+    // always_comb begin
+    //     if(pattern_gen_en) begin
 
-            if(x_pos < 640 & y_pos < 720) begin
+    //         if(x_pos < 640 & y_pos < 720) begin
+    //             pixel_gen = y_pos[9:2]; 
+    //         end 
+    //         else if(x_pos < 640 & y_pos < 1080) begin
+    //             pixel_gen = x_pos[9:2]; 
+    //         end        
+    //         else if(x_pos < 1920 & y_pos < 720) begin
+    //             pixel_gen = ((x_pos >> 6) % 2 == (y_pos >> 6) % 2) ? 8'hFF : 8'h00; 
+    //         end
+    //         else begin
+    //             pixel_gen = 8'h7F; 
+    //         end
+    //     end else begin
+    //         pixel_gen = pixel_i;
+    //     end
+    // end
+        always_comb begin
+        if(pattern_gen_en) begin
+            if(x_pos < 640 & y_pos < 540) begin
                 pixel_gen = y_pos[9:2]; 
-            end 
-            else if(x_pos < 1280 & y_pos < 720) begin
-                pixel_gen = x_pos[10:3]; 
-            end        
-            else if(x_pos < 1920 & y_pos < 720) begin
-                pixel_gen = ((x_pos >> 6) % 2 == (y_pos >> 6) % 2) ? 8'hFF : 8'h00; 
+            end else if(x_pos < 640 & y_pos < 1080) begin
+                pixel_gen = x_pos[9:2]; 
+            end else if(x_pos < 1280 & y_pos < 540) begin // white grid on black
+                pixel_gen = 8'h00;
+                if(x_pos == 660 || x_pos == 720 || x_pos == 780) begin
+                    pixel_gen = 8'hFF;
+                end else if(y_pos == 60 || y_pos == 120 || y_pos == 180) begin
+                    pixel_gen = 8'hFF;
+                end
+            end else if(x_pos < 1280 & y_pos < 1080) begin // black grid on white
+                pixel_gen = 8'hFF;
+                if(x_pos == 660 || x_pos == 720 || x_pos == 780) begin
+                    pixel_gen = 8'h00;
+                end else if(y_pos == 600 || y_pos == 660 || y_pos == 720) begin
+                    pixel_gen = 8'h00;
+                end
+            end else if(x_pos < 1920 & y_pos < 540) begin //checkerboard
+                pixel_gen = ((x_pos >> 5) % 2 == (y_pos >> 5) % 2) ? 8'hFF : 8'h00; 
+            end else if(x_pos < 1920 & y_pos < 1080) begin // low contrast grid
+                pixel_gen = 8'd125;
+                 if(x_pos == 1340 || x_pos == 1400 || x_pos == 1460) begin
+                    pixel_gen = 8'd130;
+                end else if(y_pos == 600 || y_pos == 660 || y_pos == 720) begin
+                    pixel_gen = 8'd130;
+                end 
             end
             else begin
                 pixel_gen = 8'h7F; 

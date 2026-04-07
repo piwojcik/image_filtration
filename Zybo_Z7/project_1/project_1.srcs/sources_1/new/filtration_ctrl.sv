@@ -31,7 +31,7 @@ module filtration_ctrl (
     output logic       vsync_o
 );
 
-    logic [7:0] pixel_val, gauss_pixel_val, gauss2_pixel_val, sobel_pixel_val, emboss_pixel_val, laplacian_pixel_val, sharpen_pixel_val; 
+    logic [7:0] pixel_val, pixel_reg, gauss_pixel_val, gauss2_pixel_val, sobel_pixel_val, emboss_pixel_val, laplacian_pixel_val, sharpen_pixel_val; 
     logic [7:0] window [0:2][0:2];
     logic vde_reg, hsync_reg, vsync_reg, vde_reg2, hsync_reg2, vsync_reg2;
 
@@ -46,7 +46,8 @@ module filtration_ctrl (
              vde_o <= vde_reg2;
              hsync_o <= hsync_reg2;
              vsync_o <= vsync_reg2;
-            pixel_o <= pixel_val;
+            pixel_o <= pixel_reg;
+            pixel_reg <= pixel_val;
         end
     end
 
